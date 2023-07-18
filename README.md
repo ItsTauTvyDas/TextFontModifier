@@ -21,3 +21,9 @@ Just drop this plugin to your `/plugins/` folder, and you are good to go (also c
 
 ### What's a special symbol?
 The special symbol for scoreboards in configuration is a custom colour code that replaces text's font. If there's a color in its way, then it stops, it's like with `&u`, `&o` and other similar ones.
+
+<div style="text-align: center">
+
+![views-counter](https://count.getloli.com/get/@:itstautvydas-textfontmodifier?theme=gelbooru)
+
+</div>
