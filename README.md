@@ -1,9 +1,15 @@
-# TextFontModifier
+<h1 align="center">TextFontModifier</h1>
+
+<div align="center">
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
-![boss-bar example image](assets/bossbar.png)
+</div>
 
+<div align="center">
+    <img src="assets/bossbar.png" alt="bossbar example"/>
+</div>
+<br>
 This plugin replaces font for actionbar, scoreboard (title included) and boss-bar texts. There are no commands or anything, it starts to work when plugin gets enabled. This plugin is made only for **1.19.2**!
 
 Made this quite a while ago for Drag Championship's (MCC recreation) project. Maybe someone might find this useful dunno.
@@ -22,8 +28,6 @@ Just drop this plugin to your `/plugins/` folder, and you are good to go (also c
 ### What's a special symbol?
 The special symbol for scoreboards in configuration is a custom colour code that replaces text's font. If there's a color in its way, then it stops, it's like with `&u`, `&o` and other similar ones.
 
-<div style="text-align: center">
-
-![views-counter](https://count.getloli.com/get/@:itstautvydas-textfontmodifier?theme=gelbooru)
-
+<div align="center">
+    <img src="https://count.getloli.com/get/@:itstautvydas-textfontmodifier?theme=gelbooru" alt="views counter"/>
 </div>
