@@ -10,6 +10,7 @@
     <img src="assets/bossbar.png" alt="bossbar example"/>
 </div>
 <br>
+
 This plugin replaces font for actionbar, scoreboard (title included) and boss-bar texts. There are no commands or anything, it starts to work when plugin gets enabled. This plugin is made only for **1.19.2**!
 
 Made this quite a while ago for Drag Championship's (MCC recreation) project. Maybe someone might find this useful dunno.
@@ -20,7 +21,7 @@ Made this quite a while ago for Drag Championship's (MCC recreation) project. Ma
 
 There's a packet listener and what it does is basically gets every text (in json) that is sent to the player and changes font attribute/property. This plugin might be resource-intensive, but there wasn't really a way for me to make it work in any other way on the event server I mentioned above.
 
-(You can also notice that I use some reflection, when I saw of how much I will need to use it, I just gave up and used NMS lol.)
+(You can also notice that I use some reflection, when I saw of how much I will need to use it, I just gave up and used NMS lol)
 
 ## Usage
 Just drop this plugin to your `/plugins/` folder, and you are good to go (also change the font's name in configuration).
