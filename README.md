@@ -2,6 +2,8 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
+![boss-bar example image](assets/bossbar.png)
+
 This plugin replace font for actionbar, scoreboard (title included) and boss-bar texts. There are no commands or anything, it starts to work when plugin gets enabled. This plugin is made only for **1.19.2**!
 
 Made this quite a while ago for Drag Championship's (MCC recreation) project. Maybe someone might find this useful dunno.
