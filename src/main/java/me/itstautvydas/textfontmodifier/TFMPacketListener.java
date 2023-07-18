@@ -5,39 +5,18 @@ import com.comphenix.protocol.events.ListeningWhitelist;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.events.PacketListener;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket;
-import net.minecraft.server.level.ServerBossEvent;
-import net.minecraft.world.BossEvent;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.util.UUID;
+import java.util.Optional;
 
 @SuppressWarnings("JavaReflectionMemberAccess")
 @RequiredArgsConstructor
 @Getter
 public class TFMPacketListener implements PacketListener {
-
-    static Class<?> updateOperationClass, addOperationClass;
-    static Field playerPrefixField;
-    static Constructor<?> addOperationConstructorClass;
-
-    static {
-        try {
-            updateOperationClass = Class.forName("net.minecraft.network.protocol.game.PacketPlayOutBoss$e");
-            addOperationClass = Class.forName("net.minecraft.network.protocol.game.PacketPlayOutBoss$a");
-            addOperationConstructorClass = addOperationClass.getDeclaredConstructor(BossEvent.class);
-            addOperationConstructorClass.setAccessible(true);
-            playerPrefixField = ClientboundSetPlayerTeamPacket.Parameters.class.getDeclaredField("b");
-            playerPrefixField.setAccessible(true);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
 
     private final TextFontModifierPlugin plugin;
     private final GsonComponentSerializer componentSerializer = GsonComponentSerializer.builder().build();;
@@ -59,43 +38,13 @@ public class TFMPacketListener implements PacketListener {
                 if (!plugin.getConfig().getBoolean("packets.boss-bar"))
                     return;
 
-                var currentOperation = packet.getModifier().read(1);
-                var currentOperationClass = currentOperation.getClass();
-
-                if (updateOperationClass != currentOperationClass && addOperationClass != currentOperationClass)
-                    return;
-
-                var currentOperationClassField = currentOperation.getClass().getDeclaredFields()[0];
-                currentOperationClassField.setAccessible(true);
-
-                var currentComponent = (Component) currentOperationClassField.get(currentOperation);
-
-                var json = Component.Serializer.toJsonTree(currentComponent);
-                plugin.getTextProcessor().modifyFontJson(json, null);
-                Component fixedComponent = Component.Serializer.fromJson(json);
-
-                if (currentOperationClass == addOperationClass) {
-                    var boss = new ServerBossEvent(fixedComponent, null, null);
-                    var bossFields = boss.getClass().getSuperclass().getDeclaredFields();
-                    UUID uuid = (UUID) packet.getModifier().read(0);
-                    bossFields[0].setAccessible(true);
-                    bossFields[0].set(boss, uuid);
-
-                    for (int i = 1; i < addOperationClass.getDeclaredFields().length; i++) {
-                        var field = addOperationClass.getDeclaredFields()[i];
-                        field.setAccessible(true);
-                        var bossField = bossFields[i + 1];
-                        bossField.setAccessible(true);
-                        bossField.set(boss, field.get(currentOperation));
-                    }
-
-                    var addOperator = addOperationConstructorClass.newInstance(boss);
-                    packet.getModifier().write(1, addOperator);
-                } else {
-                    var updateOperationConstructorClass = updateOperationClass.getDeclaredConstructor(Component.class);
-                    updateOperationConstructorClass.setAccessible(true);
-                    var updateOperation = updateOperationConstructorClass.newInstance(fixedComponent);
-                    packet.getModifier().write(1, updateOperation);
+                var struct = packet.getStructures().read(0);
+                if (struct.getChatComponents().size() >= 1) {
+                    WrappedChatComponent prefix = struct.getChatComponents().read(0);
+                    var json = new Gson().fromJson(prefix.getJson(), JsonElement.class);
+                    plugin.getTextProcessor().modifyFontJson(json, plugin.getTextProcessor().getSpecialSymbolForScoreboard());
+                    struct.getChatComponents().write(1, WrappedChatComponent.fromJson(json.getAsString()));
+                    packet.getStructures().write(0, struct);
                 }
             } else if (type == PacketType.Play.Server.SCOREBOARD_OBJECTIVE) {
                 if (!plugin.getConfig().getBoolean("packets.scoreboard-title"))
@@ -112,14 +61,14 @@ public class TFMPacketListener implements PacketListener {
                     return;
 
                 try {
-                    var optional = packet.getOptionalStructures().read(0);
-                    if (optional != null && optional.isPresent()) {
-                        var params = (ClientboundSetPlayerTeamPacket.Parameters) optional.get().getHandle();
-                        var component = params.getPlayerPrefix();
-                        var json = Component.Serializer.toJsonTree(component);
+                    var structOptional = packet.getOptionalStructures().readSafely(0);
+                    if (structOptional != null && structOptional.isPresent()) {
+                        var struct = structOptional.get();
+                        WrappedChatComponent prefix = struct.getChatComponents().read(1);
+                        var json = new Gson().fromJson(prefix.getJson(), JsonElement.class);
                         plugin.getTextProcessor().modifyFontJson(json, plugin.getTextProcessor().getSpecialSymbolForScoreboard());
-                        var fixedComponent = Component.Serializer.fromJson(json);
-                        playerPrefixField.set(params, fixedComponent);
+                        struct.getChatComponents().write(1, WrappedChatComponent.fromJson(json.getAsString()));
+                        packet.getOptionalStructures().write(0, Optional.of(struct));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
