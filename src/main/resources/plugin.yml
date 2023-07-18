@@ -2,3 +2,4 @@ name: TextFontModifier
 version: '${version}'
 main: me.itstautvydas.textfontmodifier.TextFontModifierPlugin
 api-version: '1.19'
+depends: [ ProtocolLib ]
