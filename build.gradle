@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id("io.github.patrick.remapper") version "1.2.0"
+}
+
+group = 'me.itstautvydas'
+version = '1.0.0'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        name = "papermc-repo"
+        url = "https://repo.papermc.io/repository/maven-public/"
+    }
+    maven {
+        name = "sonatype"
+        url = "https://oss.sonatype.org/content/groups/public/"
+    }
+    maven {
+        url = 'https://repo.codemc.io/repository/maven-public/'
+    }
+}
+
+dependencies {
+    implementation 'org.spigotmc:spigot:1.19.2-R0.1-SNAPSHOT:remapped-mojang'
+    implementation 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
+    implementation 'com.comphenix.protocol:ProtocolLib:5.0.0-SNAPSHOT'
+    implementation 'org.projectlombok:lombok:1.18.24'
+
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}
+
+remap {
+    version.set("1.19.2")
+    inputTask.set(jar)
+    archiveName.set("${project.name}-${project.version}.jar")
+    archiveClassifier.set("remapped")
+}
