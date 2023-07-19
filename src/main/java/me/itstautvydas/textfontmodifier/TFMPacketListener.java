@@ -1,30 +1,31 @@
 package me.itstautvydas.textfontmodifier;
 
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.ListeningWhitelist;
-import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.events.PacketListener;
+import com.comphenix.protocol.events.*;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Optional;
 
-@SuppressWarnings("JavaReflectionMemberAccess")
-@RequiredArgsConstructor
 @Getter
-public class TFMPacketListener implements PacketListener {
+public class TFMPacketListener extends PacketAdapter {
 
-    private final TextFontModifierPlugin plugin;
-    private final GsonComponentSerializer componentSerializer = GsonComponentSerializer.builder().build();;
+    private final Gson gson = new Gson();
+    private final GsonComponentSerializer componentSerializer = GsonComponentSerializer.builder().build();
+
+    public TFMPacketListener(Plugin plugin, ListenerPriority listenerPriority, PacketType... types) {
+        super(plugin, listenerPriority, types);
+    }
 
     @Override
     public void onPacketSending(PacketEvent packetEvent) {
         var packet = packetEvent.getPacket();
         var type = packet.getType();
+        var plugin = (TextFontModifierPlugin) getPlugin();
 
         try {
             if (type == PacketType.Play.Server.SET_ACTION_BAR_TEXT) {
@@ -38,13 +39,13 @@ public class TFMPacketListener implements PacketListener {
                 if (!plugin.getConfig().getBoolean("packets.boss-bar"))
                     return;
 
-                var struct = packet.getStructures().read(0);
-                if (struct.getChatComponents().size() >= 1) {
+                var struct = packet.getStructures().read(1);
+                if (struct.getChatComponents().size() > 0) {
                     WrappedChatComponent prefix = struct.getChatComponents().read(0);
-                    var json = new Gson().fromJson(prefix.getJson(), JsonElement.class);
+                    var json = gson.fromJson(prefix.getJson(), JsonObject.class);
                     plugin.getTextProcessor().modifyFontJson(json, plugin.getTextProcessor().getSpecialSymbolForScoreboard());
-                    struct.getChatComponents().write(1, WrappedChatComponent.fromJson(json.getAsString()));
-                    packet.getStructures().write(0, struct);
+                    struct.getChatComponents().write(0, WrappedChatComponent.fromJson(gson.toJson(json)));
+                    packet.getStructures().write(1, struct);
                 }
             } else if (type == PacketType.Play.Server.SCOREBOARD_OBJECTIVE) {
                 if (!plugin.getConfig().getBoolean("packets.scoreboard-title"))
@@ -65,9 +66,9 @@ public class TFMPacketListener implements PacketListener {
                     if (structOptional != null && structOptional.isPresent()) {
                         var struct = structOptional.get();
                         WrappedChatComponent prefix = struct.getChatComponents().read(1);
-                        var json = new Gson().fromJson(prefix.getJson(), JsonElement.class);
+                        var json = gson.fromJson(prefix.getJson(), JsonObject.class);
                         plugin.getTextProcessor().modifyFontJson(json, plugin.getTextProcessor().getSpecialSymbolForScoreboard());
-                        struct.getChatComponents().write(1, WrappedChatComponent.fromJson(json.getAsString()));
+                        struct.getChatComponents().write(1, WrappedChatComponent.fromJson(gson.toJson(json)));
                         packet.getOptionalStructures().write(0, Optional.of(struct));
                     }
                 } catch (Exception e) {
@@ -77,23 +78,5 @@ public class TFMPacketListener implements PacketListener {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    @Override
-    public void onPacketReceiving(PacketEvent packetEvent) {}
-
-    @Override
-    public ListeningWhitelist getSendingWhitelist() {
-        return ListeningWhitelist.newBuilder().highest().types(
-                PacketType.Play.Server.SCOREBOARD_OBJECTIVE,
-                PacketType.Play.Server.SCOREBOARD_TEAM,
-                PacketType.Play.Server.SET_ACTION_BAR_TEXT,
-                PacketType.Play.Server.BOSS
-        ).build();
-    }
-
-    @Override
-    public ListeningWhitelist getReceivingWhitelist() {
-        return null;
     }
 }
