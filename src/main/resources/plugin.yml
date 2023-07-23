@@ -3,4 +3,4 @@ version: '${version}'
 main: me.itstautvydas.textfontmodifier.TextFontModifierPlugin
 api-version: '1.19'
 author: ItsTauTvyDas
-depends: [ ProtocolLib ]
+depend: [ ProtocolLib ]

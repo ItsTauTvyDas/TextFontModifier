@@ -1,13 +1,11 @@
 plugins {
     id 'java'
-    id("io.github.patrick.remapper") version "1.2.0"
 }
 
 group = 'me.itstautvydas'
-version = '1.0.0'
+version = '1.0.1'
 
 repositories {
-    mavenLocal()
     mavenCentral()
     maven {
         name = "papermc-repo"
@@ -18,16 +16,14 @@ repositories {
         url = "https://oss.sonatype.org/content/groups/public/"
     }
     maven {
-        url = 'https://repo.codemc.io/repository/maven-public/'
+        url = "https://repo.dmulloy2.net/repository/public/"
     }
 }
 
 dependencies {
-    implementation 'org.spigotmc:spigot:1.19.2-R0.1-SNAPSHOT:remapped-mojang'
     implementation 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
-    implementation 'com.comphenix.protocol:ProtocolLib:5.0.0-SNAPSHOT'
+    implementation 'com.comphenix.protocol:ProtocolLib:5.0.0'
     implementation 'org.projectlombok:lombok:1.18.24'
-
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
 
@@ -43,11 +39,4 @@ processResources {
     filesMatching('plugin.yml') {
         expand props
     }
-}
-
-remap {
-    version.set("1.19.2")
-    inputTask.set(jar)
-    archiveName.set("${project.name}-${project.version}.jar")
-    archiveClassifier.set("remapped")
 }

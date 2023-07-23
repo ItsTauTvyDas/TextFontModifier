@@ -1,6 +1,8 @@
 package me.itstautvydas.textfontmodifier;
 
+import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.ListenerPriority;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -13,7 +15,12 @@ public final class TextFontModifierPlugin extends JavaPlugin {
     public void onEnable() {
         setupConfiguration();
         textProcessor = new TextProcessor(this);
-        ProtocolLibrary.getProtocolManager().addPacketListener(new TFMPacketListener(this));
+        ProtocolLibrary.getProtocolManager().addPacketListener(new TFMPacketListener(
+                this, ListenerPriority.NORMAL,
+                PacketType.Play.Server.SET_ACTION_BAR_TEXT,
+                PacketType.Play.Server.BOSS,
+                PacketType.Play.Server.SCOREBOARD_OBJECTIVE,
+                PacketType.Play.Server.SCOREBOARD_TEAM));
     }
 
     private void setupConfiguration() {
