@@ -84,8 +84,4 @@ public class TextProcessor {
             processExtra(font, obj.getAsJsonArray("extra"), specialSymbol);
         processText(font, null, obj, specialSymbol);
     }
-
-    public String modifyFontString(String str) {
-        return str.replace("\"text\"", "\"font\":\"" + getFont() + "\",\"text\"");
-    }
 }
