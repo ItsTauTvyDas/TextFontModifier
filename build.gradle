@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'me.itstautvydas'
-version = '1.0.0'
+version = '1.0.1'
 
 repositories {
     mavenCentral()
@@ -15,12 +15,14 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
-    maven { url "https://repo.dmulloy2.net/repository/public/" }
+    maven {
+        url = "https://repo.dmulloy2.net/repository/public/"
+    }
 }
 
 dependencies {
-    compileOnly  'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
-    compileOnly 'com.comphenix.protocol:ProtocolLib:5.0.0'
+    implementation 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
+    implementation 'com.comphenix.protocol:ProtocolLib:5.0.0'
     implementation 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
