@@ -42,10 +42,9 @@ public final class TextFontModifierPlugin extends JavaPlugin {
             return;
         }
 
-        config.set("config-version", 1);
         if (config.isString("font") && config.isString("special-symbol-for-scoreboards")) {
-            config.set("fonts.my-custom-font.name", config.get("font"));
-            config.set("fonts.my-custom-font.special-symbol", config.get("special-symbol-for-scoreboards"));
+            config.set("fonts.default-font.name", config.get("font"));
+            config.set("fonts.default-font.special-symbol", config.get("special-symbol-for-scoreboards"));
         } else noKeyFound("font", "special-symbol-for-scoreboards");
         var regex = config.get("regex");
         config.set("regex", null);
@@ -57,20 +56,22 @@ public final class TextFontModifierPlugin extends JavaPlugin {
         config.set("invert-regex", null);
         config.set("font", null);
         config.set("special-symbol-for-scoreboards", null);
+        config.set("config-version", 1);
+        getLogger().info("Successfully migrated to a new configuration!");
         saveConfig();
     }
 
     private void setupConfiguration() {
         var config = getConfig();
         if (!config.isConfigurationSection("fonts")) {
-            config.addDefault("fonts.my-custom-font.name", "namespace:key");
-            config.addDefault("fonts.my-custom-font.special-symbol", "$u");
+            config.addDefault("fonts.default-font.name", "namespace:key");
+            config.addDefault("fonts.default-font.special-symbol", "$u");
         }
         config.addDefault("regex.value", "[\\p{Print}&&[^~,],]+");
         config.addDefault("regex.invert", false);
         for (var key : List.of("boss-bar", "action-bar", "scoreboard-title", "scoreboard-scores")) {
             config.addDefault("packets.%s.enable".formatted(key), true);
-            config.addDefault("packets.%s.forced-font".formatted(key), key.equals("scoreboard-scores") ? "my-custom-font" : "");
+            config.addDefault("packets.%s.forced-font".formatted(key), key.equals("scoreboard-scores") ? "" : "default-font");
         }
         getConfig().options().copyDefaults(true);
         saveConfig();
