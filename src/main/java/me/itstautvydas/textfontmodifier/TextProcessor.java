@@ -4,12 +4,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.Getter;
-import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 @Getter
@@ -29,9 +27,7 @@ public class TextProcessor {
         for (var fontName : fonts.getKeys(false)) {
             var section = fonts.getConfigurationSection(fontName);
             assert section != null;
-            this.fonts.put(fontName, new Font(
-                    Key.key(Objects.requireNonNull(section.getString("font"))),
-                    section.getString("special-symbol")));
+            this.fonts.put(fontName, new Font(section.getString("font"), section.getString("special-symbol")));
         }
     }
 
@@ -79,10 +75,10 @@ public class TextProcessor {
                     var font = findFontSymbol(str);
                     if (font != null) {
                         obj.addProperty("text", str.replace(font.specialSymbol(), ""));
-                        obj.addProperty("font", font.font().toString());
+                        obj.addProperty("font", font.font());
                     }
                 } else {
-                    var key = fonts.get(fontName).font().toString();
+                    var key = fonts.get(fontName).font();
                     obj.addProperty("font", key);
                 }
             }
