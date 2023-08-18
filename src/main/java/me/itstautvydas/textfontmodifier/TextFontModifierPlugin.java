@@ -73,6 +73,7 @@ public final class TextFontModifierPlugin extends JavaPlugin {
             config.addDefault("packets.%s.enable".formatted(key), true);
             config.addDefault("packets.%s.forced-font".formatted(key), key.equals("scoreboard-scores") ? "" : "default-font");
         }
+        config.addDefault("config-version", 1);
         getConfig().options().copyDefaults(true);
         saveConfig();
     }
