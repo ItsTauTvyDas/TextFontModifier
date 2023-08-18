@@ -27,8 +27,9 @@ public class TextProcessor {
         for (var fontName : fonts.getKeys(false)) {
             var section = fonts.getConfigurationSection(fontName);
             assert section != null;
-            this.fonts.put(fontName, new Font(section.getString("font"), section.getString("special-symbol")));
+            this.fonts.put(fontName, new Font(section.getString("name"), section.getString("special-symbol")));
         }
+        plugin.getLogger().info("Registered fonts: " + String.join(", ", this.fonts.keySet()));
     }
 
     public String getRegex() {
@@ -39,14 +40,14 @@ public class TextProcessor {
         return plugin.getConfig().getBoolean("regex.invert");
     }
 
-    public void processExtra(@Nullable String fontName, JsonArray array) {
+    public void processExtra(@Nullable Font font, JsonArray array) {
         int i = 0;
         for (var elem : array) {
             var obj = elem.getAsJsonObject();
             var previous = i > 0 ? array.get(i - 1).getAsJsonObject() : null;
-            processText(fontName, previous, obj);
+            processText(font, previous, obj);
             if (obj.has("extra"))
-                processExtra(fontName, obj.getAsJsonArray("extra"));
+                processExtra(font, obj.getAsJsonArray("extra"));
             i++;
         }
     }
@@ -59,7 +60,7 @@ public class TextProcessor {
         return null;
     }
 
-    public void processText(@Nullable String fontName, JsonObject previous, JsonObject obj) {
+    public void processText(@Nullable Font font, JsonObject previous, JsonObject obj) {
         if (obj == null)
             return;
         if (obj.has("text")) {
@@ -71,16 +72,15 @@ public class TextProcessor {
                     previous.addProperty("text", "");
                     str = previousText + str;
                 }
-                if (fontName == null) {
-                    var font = findFontSymbol(str);
+                if (font == null) {
+                    font = findFontSymbol(str);
                     if (font != null) {
                         obj.addProperty("text", str.replace(font.specialSymbol(), ""));
                         obj.addProperty("font", font.font());
                     }
-                } else {
-                    var key = fonts.get(fontName).font();
-                    obj.addProperty("font", key);
+                    return;
                 }
+                obj.addProperty("font", font.font());
             }
         }
     }
@@ -98,10 +98,13 @@ public class TextProcessor {
 
         var section = plugin.getConfig().getConfigurationSection("packets." + packetName);
         assert section != null;
+
         var fontName = section.getString("forced-font");
+        assert fontName != null;
+        var font = fonts.get(fontName);
 
         if (obj.has("extra"))
-            processExtra(fontName, obj.getAsJsonArray("extra"));
-        processText(fontName, null, obj);
+            processExtra(font, obj.getAsJsonArray("extra"));
+        processText(font, null, obj);
     }
 }
