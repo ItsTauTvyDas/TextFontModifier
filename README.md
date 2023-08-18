@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE.md)
 
 </div>
 
@@ -15,7 +15,7 @@ This plugin replaces font for actionbar, scoreboard (title included) and boss-ba
 
 Made this quite a while ago for Drag Championship (MCC recreation). Maybe someone might find this useful, dunno.
 
-***Requires ProtocolLib!***
+***Requires PaperMC and ProtocolLib!***
 
 ## So, how does it work?
 
@@ -23,6 +23,11 @@ There's a packet listener and what it does is basically gets every text (in json
 
 ## Usage
 Just drop this plugin to your `/plugins/` folder, and you are good to go (also change the font's name in configuration).
+
+## Configuration
+
+### Forced fonts
+Forced font means that it will use that specific font only and special symbol won't work. **Note** that you need to specify configuration key and not actual font!
 
 ### What's a special symbol? (The default is `$u`)
 The special symbol for scoreboards (the owner only asked this for scoreboards) in configuration is a custom "color code" that replaces text's font. The font is changed until it crosses paths with another color (`$usome &ctext`, only `some` will get its font changed).

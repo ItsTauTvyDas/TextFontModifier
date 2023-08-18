@@ -31,32 +31,32 @@ public class TFMPacketListener extends PacketAdapter {
 
         try {
             if (type == PacketType.Play.Server.SET_ACTION_BAR_TEXT) {
-                if (!plugin.getConfig().getBoolean("packets.action-bar"))
+                if (!plugin.getConfig().getBoolean("packets.action-bar.enable"))
                     return;
                 var component = packet.getChatComponents().read(0);
                 var json = gson.fromJson(component.getJson(), JsonObject.class);
-                plugin.getTextProcessor().modifyFontJson(json, null);
+                plugin.getTextProcessor().modifyFontJson("action-bar", json);
                 packet.getChatComponents().write(0, WrappedChatComponent.fromJson(gson.toJson(json)));
             } else if (type == PacketType.Play.Server.BOSS) {
-                if (!plugin.getConfig().getBoolean("packets.boss-bar"))
+                if (!plugin.getConfig().getBoolean("packets.boss-bar.enable"))
                     return;
                 var struct = packet.getStructures().read(1);
                 if (struct.getChatComponents().size() > 0) {
                     WrappedChatComponent prefix = struct.getChatComponents().read(0);
                     var json = gson.fromJson(prefix.getJson(), JsonObject.class);
-                    plugin.getTextProcessor().modifyFontJson(json, null);
+                    plugin.getTextProcessor().modifyFontJson("boss-bar", json);
                     struct.getChatComponents().write(0, WrappedChatComponent.fromJson(gson.toJson(json)));
                     packet.getStructures().write(1, struct);
                 }
             } else if (type == PacketType.Play.Server.SCOREBOARD_OBJECTIVE) {
-                if (!plugin.getConfig().getBoolean("packets.scoreboard-title"))
+                if (!plugin.getConfig().getBoolean("packets.scoreboard-title.enable"))
                     return;
                 var component = packet.getChatComponents().read(0);
                 var json = gson.fromJson(component.getJson(), JsonObject.class);
-                plugin.getTextProcessor().modifyFontJson(json, null);
+                plugin.getTextProcessor().modifyFontJson("scoreboard-title", null);
                 packet.getChatComponents().write(0, WrappedChatComponent.fromJson(gson.toJson(json)));
             } else if (type == PacketType.Play.Server.SCOREBOARD_TEAM) {
-                if (!plugin.getConfig().getBoolean("packets.scoreboard-scores"))
+                if (!plugin.getConfig().getBoolean("packets.scoreboard-scores.enable"))
                     return;
                 // Don't process useless scoreboard teams
                 if (packet.getStrings().read(0).contains("CIT"))
@@ -67,7 +67,7 @@ public class TFMPacketListener extends PacketAdapter {
                         var struct = structOptional.get();
                         WrappedChatComponent prefix = struct.getChatComponents().read(1);
                         var json = gson.fromJson(prefix.getJson(), JsonObject.class);
-                        plugin.getTextProcessor().modifyFontJson(json, plugin.getTextProcessor().getSpecialSymbolForScoreboard());
+                        plugin.getTextProcessor().modifyFontJson("scoreboard-scores", json);
                         struct.getChatComponents().write(1, WrappedChatComponent.fromJson(gson.toJson(json)));
                         packet.getOptionalStructures().write(0, Optional.of(struct));
                     }
