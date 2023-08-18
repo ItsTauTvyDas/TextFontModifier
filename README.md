@@ -15,7 +15,7 @@ This plugin replaces font for actionbar, scoreboard (title included) and boss-ba
 
 Made this quite a while ago for Drag Championship (MCC recreation). Maybe someone might find this useful, dunno.
 
-***Requires ProtocolLib!***
+***Requires PaperMC and ProtocolLib!***
 
 ## So, how does it work?
 
