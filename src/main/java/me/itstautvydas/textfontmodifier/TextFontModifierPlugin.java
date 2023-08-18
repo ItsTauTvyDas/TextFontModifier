@@ -62,9 +62,10 @@ public final class TextFontModifierPlugin extends JavaPlugin {
 
     private void setupConfiguration() {
         var config = getConfig();
-
-        config.addDefault("fonts.my-custom-font.name", "namespace:key");
-        config.addDefault("fonts.my-custom-font.special-symbol", "$u");
+        if (!config.isConfigurationSection("fonts")) {
+            config.addDefault("fonts.my-custom-font.name", "namespace:key");
+            config.addDefault("fonts.my-custom-font.special-symbol", "$u");
+        }
         config.addDefault("regex.value", "[\\p{Print}&&[^~,],]+");
         config.addDefault("regex.invert", false);
         for (var key : List.of("boss-bar", "action-bar", "scoreboard-title", "scoreboard-scores")) {
