@@ -17,6 +17,12 @@ Made this quite a while ago for Drag Championship (MCC recreation). Maybe someon
 
 ***Requires PaperMC and ProtocolLib!***
 
+## Features
+- Multiple font support
+- Disable certain packets
+- Custom "color code" for font
+- Only allow text to change font if regex matches
+
 ## So, how does it work?
 
 There's a packet listener and what it does is basically gets every text (in json) that is sent to the player and changes font property. This plugin might be resource-intensive, but there wasn't really a way for me to make it work in any other way on the event server I mentioned above.
@@ -55,19 +61,19 @@ config-version: 1
 ```
 
 <details>
-    <summary>v1.0.1/v1.0.0 old config.yml</summary>
-    
-    ```
-    font: minecraft:key
-    regex: '[\p{Print}&&[^~,],]+'
-    invert-regex: false
-    packets:
-      boss-bar: true
-      action-bar: true
-      scoreboard-title: true
-      scoreboard-scores: true
-    special-symbol-for-scoreboards: $u
-    ```
+  <summary>v1.0.1/v1.0.0 old config.yml</summary>
+
+  ```yaml
+  font: minecraft:key
+  regex: '[\p{Print}&&[^~,],]+'
+  invert-regex: false
+  packets:
+    boss-bar: true
+    action-bar: true
+    scoreboard-title: true
+    scoreboard-scores: true
+  special-symbol-for-scoreboards: $u
+  ```
 </details>
 
 ### Forced fonts
