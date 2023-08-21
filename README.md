@@ -26,6 +26,50 @@ Just drop this plugin to your `/plugins/` folder, and you are good to go (also c
 
 ## Configuration
 
+New version now has migration (pretty useless ngl) from old configuration (v1.0.0/v1.0.1) to a new one (v1.1.1).
+
+### Default config.yml
+
+```yaml
+fonts:
+  default-font:
+    name: namespace:key
+    special-symbol: $u
+regex:
+  value: '[\p{Print}&&[^~,],]+'
+  invert: false
+packets:
+  boss-bar:
+    enable: true
+    forced-font: default-font
+  action-bar:
+    enable: true
+    forced-font: default-font
+  scoreboard-title:
+    enable: true
+    forced-font: default-font
+  scoreboard-scores:
+    enable: true
+    forced-font: ''
+config-version: 1
+```
+
+<details>
+    <summary>v1.0.1/v1.0.0 old config.yml</summary>
+    
+    ```
+    font: minecraft:key
+    regex: '[\p{Print}&&[^~,],]+'
+    invert-regex: false
+    packets:
+      boss-bar: true
+      action-bar: true
+      scoreboard-title: true
+      scoreboard-scores: true
+    special-symbol-for-scoreboards: $u
+    ```
+</details>
+
 ### Forced fonts
 Forced font means that it will use that specific font only and special symbol won't work. **Note** that you need to specify configuration key and not actual font!
 
