@@ -80,7 +80,7 @@ config-version: 1
 Forced font means that it will use that specific font only and special symbol won't work. **Note** that you need to specify configuration key and not actual font!
 
 ### What's a special symbol? (The default is `$u`)
-The special symbol for scoreboards (the owner only asked this for scoreboards) in configuration is a custom "color code" that replaces text's font. The font is changed until it crosses paths with another color (`$usome &ctext`, only `some` will get its font changed).
+The special symbol is a custom "color code" that replaces text's font. The font is changed until it crosses paths with another color (`$usome &ctext`, only `some` will get its font changed).
 
 ***Be aware*** that this does not really work as a real color code, in Minecraft, message is split by colors, so text `Hello &aWorld` will get split into two parts and this plugin does not create seperate part if `$u` is inserted in a middle of the word (e.g. `Hel$ulo`). That means that the symbol can be anywhere in the text (or text part as I explained 🤓), it will change the whole text's font. Do not try to insert the symbol between colors (`&a$u&b`), it's not going to work.
 
