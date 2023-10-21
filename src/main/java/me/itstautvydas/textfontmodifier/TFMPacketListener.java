@@ -53,7 +53,7 @@ public class TFMPacketListener extends PacketAdapter {
                     return;
                 var component = packet.getChatComponents().read(0);
                 var json = gson.fromJson(component.getJson(), JsonObject.class);
-                plugin.getTextProcessor().modifyFontJson("scoreboard-title", null);
+                plugin.getTextProcessor().modifyFontJson("scoreboard-title", json);
                 packet.getChatComponents().write(0, WrappedChatComponent.fromJson(gson.toJson(json)));
             } else if (type == PacketType.Play.Server.SCOREBOARD_TEAM) {
                 if (!plugin.getConfig().getBoolean("packets.scoreboard-scores.enable"))
