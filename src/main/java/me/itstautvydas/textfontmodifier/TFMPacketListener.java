@@ -6,7 +6,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import lombok.Getter;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.plugin.Plugin;
@@ -34,8 +34,8 @@ public class TFMPacketListener extends PacketAdapter {
                 if (!plugin.getConfig().getBoolean("packets.action-bar.enable"))
                     return;
                 var component = packet.getChatComponents().read(0);
-                var json = gson.fromJson(component.getJson(), JsonObject.class);
-                plugin.getTextProcessor().modifyFontJson("action-bar", json);
+                var json = gson.fromJson(component.getJson(), JsonElement.class);
+                json = plugin.getTextProcessor().modifyFontJson("action-bar", json);
                 packet.getChatComponents().write(0, WrappedChatComponent.fromJson(gson.toJson(json)));
             } else if (type == PacketType.Play.Server.BOSS) {
                 if (!plugin.getConfig().getBoolean("packets.boss-bar.enable"))
@@ -43,8 +43,8 @@ public class TFMPacketListener extends PacketAdapter {
                 var struct = packet.getStructures().read(1);
                 if (struct.getChatComponents().size() > 0) {
                     WrappedChatComponent prefix = struct.getChatComponents().read(0);
-                    var json = gson.fromJson(prefix.getJson(), JsonObject.class);
-                    plugin.getTextProcessor().modifyFontJson("boss-bar", json);
+                    var json = gson.fromJson(prefix.getJson(), JsonElement.class);
+                    json = plugin.getTextProcessor().modifyFontJson("boss-bar", json);
                     struct.getChatComponents().write(0, WrappedChatComponent.fromJson(gson.toJson(json)));
                     packet.getStructures().write(1, struct);
                 }
@@ -52,8 +52,8 @@ public class TFMPacketListener extends PacketAdapter {
                 if (!plugin.getConfig().getBoolean("packets.scoreboard-title.enable"))
                     return;
                 var component = packet.getChatComponents().read(0);
-                var json = gson.fromJson(component.getJson(), JsonObject.class);
-                plugin.getTextProcessor().modifyFontJson("scoreboard-title", json);
+                var json = gson.fromJson(component.getJson(), JsonElement.class);
+                json = plugin.getTextProcessor().modifyFontJson("scoreboard-title", json);
                 packet.getChatComponents().write(0, WrappedChatComponent.fromJson(gson.toJson(json)));
             } else if (type == PacketType.Play.Server.SCOREBOARD_TEAM) {
                 if (!plugin.getConfig().getBoolean("packets.scoreboard-scores.enable"))
@@ -66,8 +66,8 @@ public class TFMPacketListener extends PacketAdapter {
                     if (structOptional != null && structOptional.isPresent()) {
                         var struct = structOptional.get();
                         WrappedChatComponent prefix = struct.getChatComponents().read(1);
-                        var json = gson.fromJson(prefix.getJson(), JsonObject.class);
-                        plugin.getTextProcessor().modifyFontJson("scoreboard-scores", json);
+                        var json = gson.fromJson(prefix.getJson(), JsonElement.class);
+                        json = plugin.getTextProcessor().modifyFontJson("scoreboard-scores", json);
                         struct.getChatComponents().write(1, WrappedChatComponent.fromJson(gson.toJson(json)));
                         packet.getOptionalStructures().write(0, Optional.of(struct));
                     }
