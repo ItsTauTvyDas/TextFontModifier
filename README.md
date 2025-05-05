@@ -43,8 +43,8 @@ Just drop this plugin to your `/plugins/` folder, modify configuration and you a
 
 New version now has migration (pretty useless ngl) from old configuration (v1.0.0/v1.0.1) to a new one (v1.1.1).
 
-### Default config.yml (1.2.0)
-The difference from 1.1.2 and 1.2.0 is that in the newer version, `regex.value` can be empty (and by default is)
+### Default config.yml (v1.2.0)
+The difference from v1.1.2 and v1.2.0 is that in the newer version, `regex.value` can be empty (and by default is)
 ```yaml
 fonts:
   default-font:
