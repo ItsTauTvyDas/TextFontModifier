@@ -1,18 +1,14 @@
 <h1 align="center">TextFontModifier</h1>
-
 <div align="center">
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE.md)
 
 </div>
-
 <div align="center">
     <img src="assets/bossbar.png" alt="bossbar example"/>
 </div>
-<br>
 
-This plugin replaces font for actionbar, scoreboard (title included) and boss-bar texts. There are no commands or anything, it starts to work when plugin gets enabled. This plugin was initially made for 1.19.2 but it should work 1.19+
-
+This plugin replaces font for actionbar, scoreboard (title included) and boss-bar texts.
 Made this quite a while ago for Drag Championship (MCC recreation). Maybe someone might find this useful, dunno.
 
 ***Requires PaperMC and ProtocolLib!***
@@ -22,6 +18,16 @@ Made this quite a while ago for Drag Championship (MCC recreation). Maybe someon
 - Disable certain packets
 - Custom "color code" for font
 - Only allow text to change font if regex matches
+- Reload command (v1.2.0 only)
+
+## Supported versions
+In theory: **1.19**–**1.21**\
+Tested versions: **1.19.2**, **1.20.2**, **1.21.3**
+
+### **Version 1.2.0 required Java version 21!!!**
+
+If you are using v1.2.0 on 1.19 version, you might see "Unsupported class file major version 65" error,
+ignore it, the plugin will work anyway, and I won't bother to fix this.
 
 ## So, how does it work?
 
@@ -30,19 +36,22 @@ There's a packet listener and what it does is basically gets every text (in json
 ## Usage
 Just drop this plugin to your `/plugins/` folder, and you are good to go (also change the font's name in configuration).
 
+## Commands
+* **/textfontmodifier** or **/tfm** - reloads the plugin. 
+
 ## Configuration
 
 New version now has migration (pretty useless ngl) from old configuration (v1.0.0/v1.0.1) to a new one (v1.1.1).
 
-### Default config.yml
-
+### Default config.yml (1.2.0)
+The difference from 1.1.2 and 1.2.0 is that in the newer version, `regex.value` can be empty
 ```yaml
 fonts:
   default-font:
     name: namespace:key
     special-symbol: $u
 regex:
-  value: '[\p{Print}&&[^~,],]+'
+  value: ''
   invert: false
 packets:
   boss-bar:
