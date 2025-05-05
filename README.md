@@ -93,6 +93,6 @@ The special symbol is a custom "color code" that replaces text's font. The font 
 
 ***Be aware*** that this does not really work as a real color code, in Minecraft, message is split by colors, so text `Hello &aWorld` will get split into two parts and this plugin does not create seperate part if `$u` is inserted in a middle of the word (e.g. `Hel$ulo`). That means that the symbol can be anywhere in the text (or text part as I explained 🤓), it will change the whole text's font. Do not try to insert the symbol between colors (`&a$u&b`), it's not going to work.
 
-<div align="center">
+<div style="text-align: center">
     <img src="https://count.getloli.com/get/@:itstautvydas-textfontmodifier?theme=gelbooru" alt="views counter"/>
 </div>
