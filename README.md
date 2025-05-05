@@ -24,7 +24,7 @@ Made this quite a while ago for Drag Championship (MCC recreation). Maybe someon
 In theory: **1.19**–**1.21**\
 Tested versions: **1.19.2**, **1.20.2**, **1.21.3**
 
-### **Version 1.2.0 required Java version 21!!!**
+### **Version 1.2.0 requires Java version 21!!!**
 
 If you are using v1.2.0 on 1.19 version, you might see "Unsupported class file major version 65" error,
 ignore it, the plugin will work anyway, and I won't bother to fix this.
@@ -34,9 +34,9 @@ ignore it, the plugin will work anyway, and I won't bother to fix this.
 There's a packet listener and what it does is basically gets every text (in json) that is sent to the player and changes font property. This plugin might be resource-intensive, but there wasn't really a way for me to make it work in any other way on the event server I mentioned above.
 
 ## Usage
-Just drop this plugin to your `/plugins/` folder, and you are good to go (also change the font's name in configuration).
+Just drop this plugin to your `/plugins/` folder, modify configuration and you are good to go.
 
-## Commands
+## Commands (v1.2.0)
 * **/textfontmodifier** or **/tfm** - reloads the plugin. 
 
 ## Configuration
@@ -44,7 +44,7 @@ Just drop this plugin to your `/plugins/` folder, and you are good to go (also c
 New version now has migration (pretty useless ngl) from old configuration (v1.0.0/v1.0.1) to a new one (v1.1.1).
 
 ### Default config.yml (1.2.0)
-The difference from 1.1.2 and 1.2.0 is that in the newer version, `regex.value` can be empty
+The difference from 1.1.2 and 1.2.0 is that in the newer version, `regex.value` can be empty (and by default is)
 ```yaml
 fonts:
   default-font:
