@@ -110,7 +110,6 @@ public class TextProcessor {
     }
 
     public JsonElement modifyFontJson(String packetName, JsonElement json) {
-        System.out.println(json);
         if (json == null)
             return null;
 
