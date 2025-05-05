@@ -1,10 +1,10 @@
-<h1 align="center">TextFontModifier</h1>
-<div align="center">
+<h1 style="text-align: center">TextFontModifier</h1>
+<div style="text-align: center">
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE.md)
 
 </div>
-<div align="center">
+<div style="text-align: center">
     <img src="assets/bossbar.png" alt="bossbar example"/>
 </div>
 
