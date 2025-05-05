@@ -4,6 +4,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.ListenerPriority;
 import lombok.Getter;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -38,7 +39,7 @@ public final class TextFontModifierPlugin extends JavaPlugin implements CommandE
         var commandObj = Objects.requireNonNull(this.getCommand("textfontmodifier"));
         if (commandObj.getPermission() != null && sender.hasPermission(commandObj.getPermission())) {
             textProcessor.reload();
-            sender.sendMessage(NamedTextColor.GREEN + "TextFontModifier plugin has been reloaded!");
+            sender.sendMessage(Component.text("TextFontModifier plugin has been reloaded!").color(NamedTextColor.GREEN));
             return true;
         }
         return false;
