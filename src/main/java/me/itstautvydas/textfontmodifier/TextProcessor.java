@@ -19,7 +19,8 @@ public class TextProcessor {
 
     public TextProcessor(TextFontModifierPlugin plugin) {
         this.plugin = plugin;
-        regexPattern = Pattern.compile(getRegex());
+        var regexString = getRegex();
+        regexPattern = regexString.isEmpty() ? null : Pattern.compile(regexString);
 
         // Cache it
         var fonts = plugin.getConfig().getConfigurationSection("fonts");
@@ -40,15 +41,28 @@ public class TextProcessor {
         return plugin.getConfig().getBoolean("regex.invert");
     }
 
+    // 1.21 support, simple strings now are actually just strings, not objects
+    private JsonObject forceToObject(JsonElement element) {
+        if (!element.isJsonPrimitive()) {
+            if (!element.isJsonObject())
+                return null;
+            return element.getAsJsonObject();
+        }
+        var newObj = new JsonObject();
+        newObj.addProperty("text", element.getAsString());
+        return newObj;
+    }
+
     public void processExtra(@Nullable Font font, JsonArray array) {
-        int i = 0;
-        for (var elem : array) {
-            var obj = elem.getAsJsonObject();
+        for (int i = 0; i < array.size(); i++) {
+            var obj = forceToObject(array.get(i));
+            if (obj == null)
+                continue;
+            array.set(i, obj);
             var previous = i > 0 ? array.get(i - 1).getAsJsonObject() : null;
             processText(font, previous, obj);
             if (obj.has("extra"))
                 processExtra(font, obj.getAsJsonArray("extra"));
-            i++;
         }
     }
 
@@ -65,7 +79,7 @@ public class TextProcessor {
             return;
         if (obj.has("text")) {
             String str = obj.get("text").getAsString();
-            if (isRegexInverted() != regexPattern.matcher(str.toLowerCase()).matches()) {
+            if (regexPattern == null || isRegexInverted() != regexPattern.matcher(str.toLowerCase()).matches()) {
                 if (obj.has("clickEvent") && previous != null) {
                     String previousText = previous.get("text").getAsString();
                     obj.remove("clickEvent");
@@ -85,16 +99,14 @@ public class TextProcessor {
         }
     }
 
-    public void modifyFontJson(String packetName, JsonElement json) {
+    public JsonElement modifyFontJson(String packetName, JsonElement json) {
+        System.out.println(json);
         if (json == null)
-            return;
+            return null;
 
-        if (!json.isJsonObject())
-            return;
-
-        var obj = json.getAsJsonObject();
+        var obj = forceToObject(json);
         if (obj == null)
-            return;
+            return json;
 
         var section = plugin.getConfig().getConfigurationSection("packets." + packetName);
         assert section != null;
@@ -106,5 +118,6 @@ public class TextProcessor {
         if (obj.has("extra"))
             processExtra(font, obj.getAsJsonArray("extra"));
         processText(font, null, obj);
+        return obj;
     }
 }
