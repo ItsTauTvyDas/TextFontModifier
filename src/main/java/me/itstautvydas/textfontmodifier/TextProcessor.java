@@ -14,17 +14,27 @@ import java.util.regex.Pattern;
 public class TextProcessor {
 
     private final TextFontModifierPlugin plugin;
-    private final Pattern regexPattern;
+    private Pattern regexPattern;
     private final Map<String, Font> fonts = new HashMap<>();
 
     public TextProcessor(TextFontModifierPlugin plugin) {
         this.plugin = plugin;
+        reload();
+    }
+
+    public void reload() {
         var regexString = getRegex();
         regexPattern = regexString.isEmpty() ? null : Pattern.compile(regexString);
 
-        // Cache it
         var fonts = plugin.getConfig().getConfigurationSection("fonts");
-        assert fonts != null;
+        this.fonts.clear();
+
+        if (fonts == null) {
+            plugin.getLogger().warning("Missing 'fonts' configuration section! No fonts were registered...");
+            return;
+        }
+
+        // Cache the fonts
         for (var fontName : fonts.getKeys(false)) {
             var section = fonts.getConfigurationSection(fontName);
             assert section != null;
