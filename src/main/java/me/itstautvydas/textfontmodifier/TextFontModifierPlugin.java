@@ -4,12 +4,19 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.ListenerPriority;
 import lombok.Getter;
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 @Getter
-public final class TextFontModifierPlugin extends JavaPlugin {
+public final class TextFontModifierPlugin extends JavaPlugin implements CommandExecutor {
 
     private TextProcessor textProcessor;
 
@@ -24,6 +31,18 @@ public final class TextFontModifierPlugin extends JavaPlugin {
                 PacketType.Play.Server.BOSS,
                 PacketType.Play.Server.SCOREBOARD_OBJECTIVE,
                 PacketType.Play.Server.SCOREBOARD_TEAM));
+        Objects.requireNonNull(this.getCommand("textfontmodifier")).setExecutor(this);
+    }
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        var commandObj = Objects.requireNonNull(this.getCommand("textfontmodifier"));
+        if (commandObj.getPermission() != null && sender.hasPermission(commandObj.getPermission())) {
+            textProcessor.reload();
+            sender.sendMessage(NamedTextColor.GREEN + "TextFontModifier plugin has been reloaded!");
+            return true;
+        }
+        return false;
     }
 
     private void noKeyFound(String ...keys) {
@@ -67,7 +86,7 @@ public final class TextFontModifierPlugin extends JavaPlugin {
             config.addDefault("fonts.default-font.name", "namespace:key");
             config.addDefault("fonts.default-font.special-symbol", "$u");
         }
-        config.addDefault("regex.value", "[\\p{Print}&&[^~,],]+");
+        config.addDefault("regex.value", "");
         config.addDefault("regex.invert", false);
         for (var key : List.of("boss-bar", "action-bar", "scoreboard-title", "scoreboard-scores")) {
             config.addDefault("packets.%s.enable".formatted(key), true);

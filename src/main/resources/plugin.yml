@@ -4,3 +4,9 @@ main: me.itstautvydas.textfontmodifier.TextFontModifierPlugin
 api-version: '1.19'
 author: ItsTauTvyDas
 depend: [ ProtocolLib ]
+commands:
+  textfontmodifier:
+    aliases: [ 'tfm' ]
+    description: Reload TextFontModifier plugin
+    usage: /<command>
+    permission: textfontmodifier.reload
